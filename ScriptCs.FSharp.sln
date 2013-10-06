@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BC4039
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ScriptCs.FSharp.Tests", "test\ScriptCs.FSharp.Tests\ScriptCs.FSharp.Tests.fsproj", "{7B23E0B2-5169-41EC-B6D0-0C2998BD17D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{113CDD96-0824-491E-B332-62D4FDE02A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{113CDD96-0824-491E-B332-62D4FDE02A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{113CDD96-0824-491E-B332-62D4FDE02A1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B23E0B2-5169-41EC-B6D0-0C2998BD17D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B23E0B2-5169-41EC-B6D0-0C2998BD17D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B23E0B2-5169-41EC-B6D0-0C2998BD17D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B23E0B2-5169-41EC-B6D0-0C2998BD17D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

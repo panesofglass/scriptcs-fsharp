@@ -52,6 +52,9 @@ type FSharpEngine(host: IScriptHost) =
         x.AddReference(ref)
         stdoutStream.Read() |> ignore
 
+    member x.GetReferences() =
+        session.GetImportedAssemblies() |> Seq.choose id
+
     member x.ImportNamespace(namespace') =
         session.EvalInteraction(sprintf "open %s" namespace')
 
@@ -65,6 +68,8 @@ type FSharpEngine(host: IScriptHost) =
                              
 type FSharpScriptEngine(scriptHostFactory: IScriptHostFactory, logger: ILog) =
     let [<Literal>] sessionKey = "F# Session"
+
+    member val Session = None with get, set
     
     interface IScriptEngine with
         member val BaseDirectory = null with get, set
@@ -73,7 +78,7 @@ type FSharpScriptEngine(scriptHostFactory: IScriptHostFactory, logger: ILog) =
 
         member x.Execute(code, args, references, namespaces, scriptPackSession) =
             let distinctReferences = references.Union(scriptPackSession.References).Distinct()
-            let sessionState = 
+            let sessionState =
                 match scriptPackSession.State.TryGetValue sessionKey with
                 | false, _ ->
                     let host = scriptHostFactory.CreateScriptHost(ScriptPackManager(scriptPackSession.Contexts), args)
@@ -93,6 +98,7 @@ type FSharpScriptEngine(scriptHostFactory: IScriptHostFactory, logger: ILog) =
                     let sessionState = SessionState<_>(References = distinctReferences, Session = session)
                     scriptPackSession.State.Add(sessionKey, sessionState)
                     sessionState 
+
                 | true, res ->
                     logger.Debug("Reusing existing session") 
                     let sessionState = res :?> SessionState<FSharpEngine>
@@ -107,6 +113,8 @@ type FSharpScriptEngine(scriptHostFactory: IScriptHostFactory, logger: ILog) =
                         logger.DebugFormat("Adding reference to {0}", ref)
                         sessionState.Session.AddReference ref)
                     sessionState
+            
+            x.Session <- Some sessionState.Session
 
             match sessionState.Session.Execute(code) with
             | Success result ->
