@@ -1,5 +1,5 @@
 ﻿namespace ScriptCs.FSharp
-open ScriptCs
+open ScriptCs.Contracts
 
 [<Module("fsharp", Extensions="fs,fsx")>]
 type FSharpModule () =

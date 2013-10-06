@@ -9,6 +9,7 @@ open Microsoft.FSharp.Compiler.Interactive.Shell
 open Common.Logging
 open ExtCore
 open ScriptCs
+open ScriptCs.Contracts
 open ScriptCs.Hosting
 
 type Result =
@@ -63,13 +64,12 @@ type FSharpEngine(host: IScriptHost) =
             (stdin >>= stdoutStream >>= stdout >>= stderrStream >>= stderr).Dispose()             
                              
 type FSharpScriptEngine(scriptHostFactory: IScriptHostFactory, logger: ILog) =
-    let mutable baseDir = String.empty
     let [<Literal>] sessionKey = "F# Session"
     
     interface IScriptEngine with
-        member x.BaseDirectory
-            with get() = baseDir
-            and set value = baseDir <- value
+        member val BaseDirectory = null with get, set
+
+        member val FileName = null with get, set
 
         member x.Execute(code, args, references, namespaces, scriptPackSession) =
             let distinctReferences = references.Union(scriptPackSession.References).Distinct()
@@ -117,4 +117,3 @@ type FSharpScriptEngine(scriptHostFactory: IScriptHostFactory, logger: ILog) =
                 ScriptResult(ReturnValue = cleaned)
             | Error e -> ScriptResult(CompileExceptionInfo = ExceptionDispatchInfo.Capture(exn e))
             | Incomplete -> ScriptResult()
-
